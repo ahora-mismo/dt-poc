@@ -1,0 +1,6 @@
+{
+  "messages": [
+    { "id": "m1", "threadId": "t1" }
+  ],
+  "resultSizeEstimate": 1
+}

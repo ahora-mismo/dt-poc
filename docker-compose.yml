@@ -1,0 +1,40 @@
+services:
+  dt-agent:
+    build: .
+    env_file: .env
+    environment:
+      # Overrides MCP_HOST from env_file (D-59, D-65): inside the container
+      # the MCP server must listen on all interfaces for Docker to forward
+      # the published port to it. The host side still only publishes
+      # 127.0.0.1 (see `ports` below).
+      MCP_HOST: "0.0.0.0"
+    volumes:
+      # Durable SQLite database (D-6). DB_PATH in .env.sample is
+      # "data/agent.db", relative to the image's WORKDIR (/app), so this
+      # matches /app/data.
+      - ./data:/app/data
+      # D-67 (task 33): terraform/gmail/ for the Google Cloud setup, bind
+      # mounted (not copied into the image) so Terraform state and any
+      # edits land on the host, not only inside a disposable container.
+      # See terraform/README.md for how to run it from inside this same
+      # container with `docker compose exec`.
+      - ./terraform:/app/terraform
+      # The terminal-only consent helper run by terraform/print_env.sh
+      # (terraform/README.md, step 6); read-only, not part of the app.
+      - ./scripts:/app/scripts:ro
+      # .env, so the wizard (step 6) can write the three GOOGLE_* values
+      # into the host's file. No new exposure: env_file above already puts
+      # every value into the container's environment. The app itself never
+      # reads this file (D-15).
+      - ./.env:/app/.env
+    # No endless restart loop on a fatal error (D-43, D-50): the app exits
+    # non-zero on auth/config failures, and this policy stops retrying
+    # after a few attempts.
+    restart: on-failure:3
+    ports:
+      # Only matters when ENABLE_MCP=true (D-59); the MCP server has no
+      # authentication, so it is published to localhost only, never to
+      # other machines (the `environment:` override above makes it bind
+      # all interfaces inside the container, which Docker requires to
+      # forward this published port).
+      - "127.0.0.1:${MCP_PORT:-8765}:${MCP_PORT:-8765}"

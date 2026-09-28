@@ -1,0 +1,18 @@
+Ai permis accesul Google Auth Library la unele date din Contul Google
+
+assistant@acme.example
+
+Dacă nu ai permis accesul Google Auth Library la unele date din Contul tău Google, este posibil ca altcineva să încerce să-ți acceseze datele din cont.
+
+Verifică acum activitatea contului și securizează-ți contul.
+
+Verifică activitatea (https://accounts.google.com/AccountChooser?Email=assistant@acme.example&continue=https://myaccount.google.com/alert/nt/1790511095000?rfn%3D127%26rfnc%3D1%26eid%3D2208591861125911988%26et%3D0)
+
+Pentru a modifica oricând accesul pe care îl are Google Auth Library la datele tale, accesează Contul Google (https://accounts.google.com/AccountChooser?Email=assistant@acme.example&continue=https://myaccount.google.com/connections/overview/AREUMUUwsDcLt_fxgd4rhOPoKYekrWOnovZjC5iTMbGhoalKufCwHDYUcw3UTSwLlO46RkD5ZhZhbhyhGmbLL3N1h1s?utm_source%3Dsec_alert%26utm_medium%3Demail_notification%26force_all%3Dtrue)
+
+Poți vedea activitatea de securitate și la
+https://myaccount.google.com/notifications (https://myaccount.google.com/notifications)
+
+Ai primit acest e-mail pentru a te informa despre modificările importante aduse serviciilor și Contului Google.
+
+© 2026 Google Ireland Ltd., Gordon House, Barrow Street, Dublin 4, Ireland

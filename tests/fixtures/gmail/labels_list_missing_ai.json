@@ -1,0 +1,6 @@
+{
+  "labels": [
+    { "id": "Label_1", "name": "TASK", "type": "user" },
+    { "id": "INBOX", "name": "INBOX", "type": "system" }
+  ]
+}

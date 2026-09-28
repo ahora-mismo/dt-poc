@@ -1,0 +1,7 @@
+{
+  "id": "evt-existing",
+  "attendees": [
+    {"email": "organizer@example.com", "organizer": true, "responseStatus": "accepted"},
+    {"email": "mailbox@example.com", "self": true, "responseStatus": "needsAction"}
+  ]
+}

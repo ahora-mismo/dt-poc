@@ -1,0 +1,66 @@
+flowchart TD
+    %% Business process: the life of one email, one lane per participant, top to bottom.
+    %% High level: every participant and step, not every decision.
+
+    subgraph Sender["1. Sender"]
+        S1(["Sends an email<br/>or a calendar invitation"])
+    end
+
+    subgraph Intake["2. Agent: intake"]
+        I1["Gmail delivers it to the INBOX"]
+        I2["Poll the INBOX every poll interval<br/>(at startup: the last N messages)"]
+        I3{"Already processed<br/>or already queued?"}
+        I4["Put it on the queue"]
+    end
+
+    subgraph Worker["3. Agent: worker, one message at a time"]
+        W1{"What is it?"}
+        W2["Extract facts by code:<br/>authentication, links, bulk cues,<br/>internal sender, allowlist"]
+        W3["Classify: one label, deadline<br/>(LLM)"]
+        W4["SPAM: move to Spam, nothing else"]
+        W5["Decide urgency by code;<br/>add the label, URGENT + star,<br/>archive or Finance by the label"]
+        W6["Prepare the action:<br/>sales decline, meeting options<br/>(Calendar free/busy),<br/>invitation accept/decline<br/>(Calendar free/busy),<br/>urgent acknowledgement,<br/>courtesy thank-you<br/>(drafts by the LLM)"]
+        W7{"Approval needed?"}
+        W8["Send the decline right away<br/>(sales, default setting)"]
+        W9["Send the approval email:<br/>summary, options, signed token"]
+        W10["No action to take"]
+    end
+
+    subgraph Manager["4. Manager"]
+        M1(["Reads the approval email;<br/>replies APPROVE, APPROVE n, or REJECT"])
+    end
+
+    subgraph Approval["5. Agent: approval handling"]
+        A1{"Token valid, latest,<br/>not expired?"}
+        A6["Forged token: SPAM label"]
+        A2{"Decision"}
+        A3["APPROVE: execute exactly what was signed:<br/>send the reply, create the event<br/>(Calendar invites the sender),<br/>or accept the invitation;<br/>a meeting slot taken or past meanwhile:<br/>a fresh approval email instead"]
+        A4["REJECT: meeting request: kind 'not available' reply;<br/>invitation: declined; reply: nothing sent"]
+        A5["Expired, superseded, or unclear:<br/>explain and, where possible,<br/>send a fresh approval email"]
+    end
+
+    subgraph Close["6. Agent: close"]
+        E1["Record the message;<br/>audit log: label, action, outcome"]
+        E2["On repeated failure: AI/Error;<br/>unreadable LLM output: AI/NeedsReview"]
+    end
+
+    S1 --> I1 --> I2 --> I3
+    I3 -- yes --> I2
+    I3 -- no --> I4 --> W1
+    W1 -- "a new email" --> W2 --> W3
+    W3 -- SPAM --> W4
+    W3 -- "not spam" --> W5 --> W6 --> W7
+    W7 -- no --> W8
+    W7 -- yes --> W9 --> M1
+    W5 -- "nothing to reply" --> W10
+    W1 -- "a reply to an approval email" --> A1
+    W1 -- "the agent's own, or already handled" --> E1
+    M1 -. "the reply arrives<br/>as a new email" .-> I1
+    A1 -- "forged" --> A6
+    A1 -- "expired or superseded" --> A5
+    A1 -- yes --> A2
+    A2 -- APPROVE --> A3
+    A2 -- REJECT --> A4
+    A2 -- unclear --> A5
+    W4 & W8 & W9 & W10 & A3 & A4 & A5 & A6 --> E1
+    W1 -. "any step fails" .-> E2 --> E1

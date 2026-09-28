@@ -1,0 +1,26 @@
+# Virtualenv and VCS
+.venv
+.git
+
+# Secrets: the app never reads .env itself (D-53); it must not be baked
+# into the image either. docker-compose passes it at run time (env_file).
+.env
+
+# Planning / docs / IDE, not needed at runtime
+PLANS
+doc
+.idea
+.claude
+*.iml
+
+# Caches
+__pycache__
+**/__pycache__
+.mypy_cache
+.pytest_cache
+.pytest_tmp
+.ruff_cache
+
+# Runtime data volume (mounted, not baked in) and tests
+data
+tests

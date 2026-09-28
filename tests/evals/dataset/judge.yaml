@@ -1,0 +1,127 @@
+# Judge calibration eval cases (D-51, task 32, task 44).
+#
+# Parsed by `tests/evals/run_evals.py::JudgeCase`. Each case is a *fixed, hand-written*
+# reply body -- never drafted by an LLM here -- run through `_tone_check` (the same code
+# "?"/sentence-count checks plus the judge, against `judge.md`) with a pinned overall
+# `expected_pass` verdict. These calibrate the judge itself: a good reply should pass, and
+# each of the ways a reply commonly goes wrong should fail on the specific criterion it
+# violates.
+
+# A textbook-good sales decline: thanks, declines politely, positive, no promises, no
+# question, short. Every criterion in `_SALES_JUDGE_CRITERIA` should pass.
+- name: judge_calibration_good_sales_decline
+  rubric: sales
+  original_email_text: >
+    Hi, I noticed your company has been growing fast and thought our
+    automation platform might help your team save hours each week. Would
+    you be open to a quick 15-minute call this week?
+  body: >
+    Thank you for reaching out and for thinking of us. We're not pursuing
+    this at the moment, but we appreciate you getting in touch and wish
+    you all the best with it.
+  expected_pass: true
+
+# Violates "makes no promise of any kind" -- "we'll keep you in mind" is exactly the
+# example the prompt names as a forbidden promise.
+- name: judge_calibration_bad_sales_decline_keeps_in_mind
+  rubric: sales
+  original_email_text: >
+    Hi, I noticed your company has been growing fast and thought our
+    automation platform might help your team save hours each week. Would
+    you be open to a quick 15-minute call this week?
+  body: >
+    Thank you for reaching out. We're not pursuing this at the moment, but
+    we'll keep you in mind for the future.
+  expected_pass: false
+
+# Violates the code-level "no question mark" check.
+- name: judge_calibration_bad_sales_decline_with_question
+  rubric: sales
+  original_email_text: >
+    Hi, I noticed your company has been growing fast and thought our
+    automation platform might help your team save hours each week. Would
+    you be open to a quick 15-minute call this week?
+  body: >
+    Thank you for reaching out. We're not pursuing this at the moment, but
+    could you tell us more about your pricing for next year?
+  expected_pass: false
+
+# Violates the task-32 criterion: it commits to doing/reviewing the task itself, rather
+# than a thank-you only (the `courtesy_reply.md` prompt, task 32; this email itself is no
+# longer `warranted` under the task-44 rewrite, but the body-tone criterion it violates
+# still needs a fixed calibration case).
+- name: judge_calibration_bad_courtesy_reply_commits_to_action
+  rubric: courtesy
+  original_email_text: >
+    Could you double check the numbers on slide 4 when you have a sec? No
+    rush, just wanted to flag it before the meeting.
+  body: >
+    Thanks for flagging this -- I'll take a look at slide 4 and get back to
+    you shortly.
+  expected_pass: false
+
+# Task 44: violates the new criterion -- "Looks good, thanks!" implies the report was
+# read and reviewed, which the reply must never say or imply.
+- name: judge_calibration_bad_courtesy_reply_implies_reviewed
+  rubric: courtesy
+  original_email_text: >
+    I finished the report and attached it -- let me know if it looks good.
+  body: >
+    Looks good, thanks!
+  expected_pass: false
+
+# D-39 business tone: gushing thanks with exclamation marks is not business-appropriate.
+- name: judge_calibration_bad_courtesy_reply_gushing
+  rubric: courtesy
+  original_email_text: >
+    Just wanted to say thanks for covering my shift yesterday, really saved me!
+  body: >
+    Thanks so much for the kind words! Happy to help out.
+  expected_pass: false
+
+# D-39: a plain, measured thank-you for delivered work; every courtesy criterion passes.
+- name: judge_calibration_good_courtesy_reply
+  rubric: courtesy
+  original_email_text: >
+    I finished the report and attached it -- let me know if it looks good.
+  body: >
+    Thank you for sending the report over.
+  expected_pass: true
+
+# D-39: thanking them for their work on it judges the work, which the reply must never do.
+- name: judge_calibration_bad_courtesy_reply_thanks_for_work
+  rubric: courtesy
+  original_email_text: >
+    I finished the report and attached it -- let me know if it looks good.
+  body: >
+    Thank you for sending the report over, and for your work on it.
+  expected_pass: false
+
+# D-39: the second sentence comments on the shared news, which the reply must never do.
+- name: judge_calibration_bad_courtesy_reply_comments_on_news
+  rubric: courtesy
+  original_email_text: >
+    Wanted to share that our team just hit our Q3 goals a month early --
+    really proud of everyone's work this quarter.
+  body: >
+    Thank you for sharing the news. That's great to hear about the team's
+    progress.
+  expected_pass: false
+
+# D-39: never thank them for their kind words, even without gushing.
+- name: judge_calibration_bad_courtesy_reply_thanks_for_kind_words
+  rubric: courtesy
+  original_email_text: >
+    Just wanted to say thanks for covering my shift yesterday, really saved me!
+  body: >
+    Thank you for the kind words.
+  expected_pass: false
+
+# D-39: a plain thank-you gets "You're welcome" in kind; every courtesy criterion passes.
+- name: judge_calibration_good_courtesy_reply_to_thanks
+  rubric: courtesy
+  original_email_text: >
+    Just wanted to say thanks for covering my shift yesterday, really saved me!
+  body: >
+    You're welcome, glad I could help.
+  expected_pass: true

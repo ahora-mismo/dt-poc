@@ -1,0 +1,18 @@
+{
+  "history": [
+    {
+      "id": "100",
+      "messagesAdded": [
+        {
+          "message": {
+            "id": "m1",
+            "threadId": "t1",
+            "labelIds": ["INBOX", "UNREAD"]
+          }
+        }
+      ]
+    }
+  ],
+  "historyId": "140",
+  "nextPageToken": "page-2"
+}

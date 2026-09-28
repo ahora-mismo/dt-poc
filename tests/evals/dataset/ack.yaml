@@ -1,0 +1,39 @@
+# Urgent-internal acknowledgement eval cases (D-40, D-51).
+#
+# Parsed by `tests/evals/run_evals.py::AckCase`. Unlike `courtesy.yaml`, there is no
+# `expected_warranted`: the flow has already decided the reply is required (D-40 §2), so
+# every case always expects an acknowledgement to be drafted, checked by code (no question
+# mark, <=3 sentences) plus an LLM judge against `_ACK_JUDGE_CRITERIA` (derived from
+# `prompts/urgent_ack.md`), with the real `URGENT_INTERNAL_HINT` text (which names
+# nobody) passed to the judge as allowed content.
+
+# Moved from `courtesy.yaml` (task 43): this case used to exercise the courtesy drafter's
+# now-removed drafting hint; it exercises the dedicated acknowledgement drafter instead.
+- name: urgent_internal_vendor_contract
+  email:
+    from_address: priya@acme.example
+    from_name: Priya Nair
+    subject: Need this today
+    body: >
+      This is urgent -- I need your approval on the vendor contract before
+      end of day. Please review and confirm.
+
+- name: urgent_internal_request_with_deadline
+  email:
+    from_address: robin@acme.example
+    from_name: Robin Carter
+    subject: "URGENT: sign-off needed by 5pm"
+    body: >
+      This is time-sensitive -- I need your sign-off on the incident
+      report by 5pm today so we can close it out with the customer.
+      Please confirm as soon as you can.
+
+- name: urgent_internal_german_request
+  email:
+    from_address: lena@acme.example
+    from_name: Lena Fischer
+    subject: "Dringend: Freigabe erforderlich"
+    body: >
+      Das ist dringend -- ich brauche deine Freigabe fuer den
+      Lieferantenvertrag so schnell wie moeglich. Bitte pruefe es und
+      bestaetige mir kurz Bescheid.

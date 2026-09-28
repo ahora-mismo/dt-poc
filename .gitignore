@@ -1,0 +1,27 @@
+.env
+.venv/
+__pycache__/
+.pytest_cache/
+.pytest_tmp/
+tests/.tmp/
+.mypy_cache/
+.ruff_cache/
+data/
+*.db
+*.db-wal
+*.db-shm
+.coverage
+htmlcov/
+dist/
+
+# Terraform (D-67, terraform/gmail/): only the per-directory cache is ignored.
+# terraform.tfvars, terraform.tfstate (+ backups) and .terraform.lock.hcl are
+# committed on purpose for this POC — see terraform/README.md, "Decision:
+# state and tfvars are committed". Never do this on a production project.
+terraform/**/.terraform/
+
+# internal
+/.idea
+/dt_agent.iml
+/.claude/.cc2cc*
+/doc

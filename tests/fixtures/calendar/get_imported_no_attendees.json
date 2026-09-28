@@ -1,0 +1,6 @@
+{
+  "id": "evt-imported",
+  "iCalUID": "uid-2",
+  "summary": "Partner sync",
+  "organizer": {"email": "organizer@example.com"}
+}

@@ -1,0 +1,15 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Example Corp//Meeting Scheduler//EN
+METHOD:REQUEST
+BEGIN:VEVENT
+UID:event-part-001@example.com
+DTSTAMP:20260920T090000Z
+DTSTART;TZID=Europe/Bucharest:20261005T140000
+DTEND;TZID=Europe/Bucharest:20261005T150000
+SUMMARY:Quarterly Planning Sync
+LOCATION:Conference Room A
+ORGANIZER;CN=Alice Organizer:mailto:alice@example.com
+SEQUENCE:0
+END:VEVENT
+END:VCALENDAR

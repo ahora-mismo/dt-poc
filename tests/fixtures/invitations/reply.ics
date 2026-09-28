@@ -1,0 +1,12 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Example Corp//Meeting Scheduler//EN
+METHOD:REPLY
+BEGIN:VEVENT
+UID:event-part-001@example.com
+DTSTAMP:20260922T091500Z
+ATTENDEE;PARTSTAT=ACCEPTED;CN=Carol Attendee:mailto:carol@example.com
+ORGANIZER;CN=Alice Organizer:mailto:alice@example.com
+SEQUENCE:0
+END:VEVENT
+END:VCALENDAR
